@@ -71,6 +71,10 @@ def tts (text):
     x.save(zus)
    
 
+def create_video(video, subaudio):
+    audio = video_editor.AudioFileClip(subaudio)
+    clip = video_editor.VideoFileClip(video).subclip(audio.duration)
+    clip = clip.volumex(0.8)
 
 
 
