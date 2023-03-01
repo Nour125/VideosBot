@@ -74,11 +74,18 @@ def tts (text):
 def create_video(video, subaudio):
     audio = video_editor.AudioFileClip(subaudio)
     clip = video_editor.VideoFileClip(video).subclip(audio.duration)
-    clip = clip.volumex(0.8)
+    clip = clip.volumex(0.0)
+    finalaudio = video_editor.CompositeAudioClip([clip.audio, audio])
+    final_clip = clip.set_audio(finalaudio)
+    return final_clip
+
 
 
 
 y = hotsub()
-pre_processing(y)
-tts(y)
+#pre_processing(y)
+print(y)
+#tts(y)
+d = create_video("m.mp4","01.03.2023.mp3")
+d.write_videofile("final.mp4")
 print("done")
