@@ -70,9 +70,16 @@ def tts (text):
     x = gtts.gTTS(text, lang ='en', tld ='us')
     x.save(zus)
    
+def cut_ten_Sekunden(video):
+    start = random.randrange(1, 50)
+    ende  = start + 1 #Bestimmt wie viel Sekunden ausm video genommen werden
+    print(start)
+    print(ende)
+    return video_editor.VideoFileClip(video).subclip(start * 10, ende * 10)
 
 def create_video(video, subaudio):
     audio = video_editor.AudioFileClip(subaudio)
+    #hat den video nicht gekurzt muss noch mal scauen
     clip = video_editor.VideoFileClip(video).subclip(audio.duration)
     clip = clip.volumex(0.0)
     finalaudio = video_editor.CompositeAudioClip([clip.audio, audio])
@@ -82,10 +89,12 @@ def create_video(video, subaudio):
 
 
 
-y = hotsub()
+#y = hotsub()
 #pre_processing(y)
-print(y)
+#print(y)
 #tts(y)
-d = create_video("m.mp4","01.03.2023.mp3")
-d.write_videofile("final.mp4")
+#d = create_video("m.mp4","01.03.2023.mp3")
+#d.write_videofile("final.mp4")
+test = cut_ten_Sekunden("m.mp4")
+test.write_videofile("final.mp4")
 print("done")
