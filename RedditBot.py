@@ -70,21 +70,33 @@ def tts (text):
     x = gtts.gTTS(text, lang ='en', tld ='us')
     x.save(zus)
    
-def cut_ten_Sekunden(video):
-    start = random.randrange(1, 50)
-    ende  = start + 1 #Bestimmt wie viel Sekunden ausm video genommen werden
+
+def cut_one_min(video):
+    start = random.randrange(1, 180)
+    ende  = start + 6 #Bestimmt wie viel Sekunden ausm video genommen werden
     print(start)
     print(ende)
-    return video_editor.VideoFileClip(video).subclip(start * 10, ende * 10)
+    cur = video_editor.VideoFileClip(video).subclip(start * 10, ende * 10)
+    return cur
+
+
+def add_ten_sekunden(video):
+    start = random.randrange(1, 180)
+    ende  = start + 1 #Bestimmt wie viel Sekunden ausm video genommen werden
+    ten_sec_clip = video_editor.VideoFileClip(video).subclip(start * 10, ende * 10)
+    final_clip = video_editor.concatenate_videoclips([video,ten_sec_clip])
+    return final_clip
 
 def create_video(video, subaudio):
     audio = video_editor.AudioFileClip(subaudio)
-    #hat den video nicht gekurzt muss noch mal scauen
-    clip = video_editor.VideoFileClip(video).subclip(audio.duration)
+    clip = video_editor.VideoFileClip(video)
+    while(clip.duration < audio.duration):
+        clip = add_ten_sekunden(clip)
+    clip = video_editor.VideoFileClip.subclip(0,audio.duration)
     clip = clip.volumex(0.0)
-    finalaudio = video_editor.CompositeAudioClip([clip.audio, audio])
-    final_clip = clip.set_audio(finalaudio)
-    return final_clip
+    #finalaudio = video_editor.CompositeAudioClip([clip.audio, audio])
+    clip = clip.set_audio(audio)
+    return clip
 
 
 
@@ -93,8 +105,9 @@ def create_video(video, subaudio):
 #pre_processing(y)
 #print(y)
 #tts(y)
-#d = create_video("m.mp4","01.03.2023.mp3")
-#d.write_videofile("final.mp4")
-test = cut_ten_Sekunden("m.mp4")
-test.write_videofile("final.mp4")
+f = cut_one_min("m.mp4")
+d = create_video(f ,"01.03.2023.mp3")
+d.write_videofile("final.mp4")
+#test = cut_ten_Sekunden("m.mp4")
+#test.write_videofile("final.mp4")
 print("done")
