@@ -1,4 +1,5 @@
 import datetime
+import glob
 import os
 import math
 import pyttsx3
@@ -15,9 +16,11 @@ mp3 = ".mp3"
 mp4 = ".mp4"
 zus_audio_name = date.strftime("%d.%m.%Y") + mp3
 zus_video_name = date.strftime("%d.%m.%Y") + mp4
+final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4 
 commentsList = []
 submissionList = []
 commentwords = list()
+thirty_minute_videos = ["minecraft"]
 
 lenOfCom = 0
 reddit = praw.Reddit(
@@ -77,6 +80,9 @@ def tts (text):
 def get_audio():
     #hier musst du die sub aufrufen damit du den name bekommst
     return video_editor.AudioFileClip("01.03.2023.mp3")
+def get_thirty_minute_videos():
+    r = random.randrange( 0 , len(thirty_minute_videos) - 1)
+    return thirty_minute_videos[r]
    
 def make_suitable_background_video(video):
     audio = get_audio()
@@ -107,24 +113,39 @@ def add_ten_sekunden(video):
 # can you pass a video?? das kann das problem sein vllt mach alles in eine methode 
 # wenn das nicht geht: mach einfach "die add_ten_sekunden" weg und stat "cut_one_min" mach eine mehtode die
 # dirkt nach die länge des audios ein video erstelt und speichert mit dem datum als name 
-def create_final_video(video):
-    #audio = video_editor.AudioFileClip(subaudio)
-    audio = get_audio()
+def create_final_video(video, subaudio):
+    audio = video_editor.AudioFileClip(subaudio)
     clip = video_editor.VideoFileClip(video)
     clip = clip.volumex(0.0)
     clip = clip.set_audio(audio)
-    clip.write_videofile("final.mp4")
-    #lösch den background_video
-    os.remove(zus_video_name)
+    clip.write_videofile(final_video_name)
+    #lösch den background_video muss noch gemacht werden
+    
+#funktioniert nicht obwohl ich den schliße kommt dies fehler [WinError 32] Der Prozess
+#kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird
+def delete_background_video(name):
+    path = os.path.abspath(name)
+    print(path)
+    video_editor.VideoClip.close(name)
+    os.remove(path)
+
+#mach die main methode
+
+def main():
+    while(True):
+        #mach was du willst
+
+        day = datetime.datetime.now
+        day = day + datetime.timedelta(days = 1)
+        while(datetime.date.day() == day ):
+            #einfach warten bis der nächte tag kommt dann  nochmla was posten
+            x = x
 
 
-
-
-
-#y = hotsub()
-#pre_processing(y)
-#print(y)
-#tts(y)
-make_suitable_background_video("m.mp4")
-create_final_video(zus_video_name)
+y = hotsub()
+pre_processing(y)
+print(y)
+tts(y)
+make_suitable_background_video(get_thirty_minute_videos())
+create_final_video(zus_video_name, zus_audio_name)
 print("done")
