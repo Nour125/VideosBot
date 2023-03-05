@@ -10,6 +10,11 @@ from gtts.tokenizer import pre_processors
 import moviepy.editor as video_editor
 import praw
 from praw.models import MoreComments
+from wand.image import Image
+import wand.api
+
+video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
+
 engine = pyttsx3.init()
 date = datetime.datetime.now()
 mp3 = ".mp3"
@@ -73,7 +78,9 @@ def hotsub():
             subfound = True
 
     reddit.read_only = False  
-    return (sub +"\n"+ com)
+    global fs
+    fs = sub +"\n"+ com
+    return (fs)
 
 
 def pre_processing(text):
@@ -123,13 +130,18 @@ def add_ten_sekunden(video):
 def create_final_video(video, subaudio):
     audio = video_editor.AudioFileClip(subaudio)
     clip = video_editor.VideoFileClip(video)
+    print(fs)
+    subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
+    subtitle = subtitle.set_duration(audio.duration)
     clip = clip.volumex(0.0)
     clip = clip.set_audio(audio)
+    clip = video_editor.CompositeVideoClip([clip,subtitle])
     clip.write_videofile(final_video_name)
-    clip.reader.close()
     clip.close()
     #lösch den background_video muss noch gemacht werden
     
+
+
 #funktioniert nicht obwohl ich den schliße. Es kommt diese fehler [WinError 32] Der Prozess
 #kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird
 #def delete_background_video(name):
@@ -138,7 +150,13 @@ def create_final_video(video, subaudio):
     #video_editor.VideoClip.close(name)
     #os.remove(path)
 
+
+def testst():
+    tx = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
+    tx.save_frame("test.png")
+
 #mach die main methode
+
 
 def main():
     while(True):
@@ -152,6 +170,7 @@ def main():
 
 
 y = hotsub()
+testst()
 pre_processing(y)
 print(y)
 tts(y)
