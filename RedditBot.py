@@ -2,6 +2,7 @@ import datetime
 import glob
 import os
 import math
+import time
 import pyttsx3
 import random
 import gtts
@@ -12,6 +13,7 @@ import praw
 from praw.models import MoreComments
 from wand.image import Image
 import wand.api
+from moviepy.video.tools.subtitles import SubtitlesClip
 
 video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
 
@@ -151,9 +153,7 @@ def create_final_video(video, subaudio):
     #os.remove(path)
 
 
-def testst():
-    tx = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
-    tx.save_frame("test.png")
+
 
 #mach die main methode
 
@@ -168,13 +168,71 @@ def main():
             #einfach warten bis der nächte tag kommt dann nochmla was posten
             x = x
 
+def testst():
+    #tx = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
+    #tx.save_frame("test.png")
+    #v = v.write_images_sequence("frame%03d.png")
+    #v.write_videofile("test.mp4")
+    #print ( [frame[0,:,0].max()
+    #         for frame in v.iter_frames()])
+    #generator = lambda fs: video_editor.TextClip(fs, font='Georgia-Regular', fontsize=24, color='white')
+    sub = SubtitlesClip("06.03.2023.final.srt")
+    #print(sub)
+    z  = ""
+    z = str(sub) 
+    stl = [] 
+    stl = z.split("\n")
+    print(1)
+    print("\n")
+    print(stl[0])
+    print("\n")
+    print("\n")
+    print("\n")
+    print(stl[1])
+    print("\n")
+    print("\n")
+    print("\n")
+    print(2)
+    print("\n")
+    stl = z.split(" - ")
+    print(stl[0])
+    print("\n")
+    print("\n")
+    print("\n")
+    print(stl[1])
+    print("\n")
+    print("\n")
+    print("\n")
+    print(3)
+    print("\n")
+    stl = z.split(" ")
+    print(stl[0])
+    print("\n")
+    print(stl[1])
+    print("\n")
+    print(stl[2])
+    print("\n")
+    print(stl[3])
+    print("\n")
+    print(stl[4])
 
-y = hotsub()
+    #i=0
+    #for x in stl:
+        #print("this is form the list: " + str(i)+"  "  + x + "\n")
+        #i+=1
+        #time.sleep(2)
+    #subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('top')
+    #subtitle = subtitle.set_duration(v.duration)
+    #v = video_editor.VideoFileClip("06.03.2023.final.mp4")
+    #final = video_editor.CompositeVideoClip([v, sub])
+    #final.write_videofile("final10000.mp4", fps=v.fps)
+
+#y = hotsub()
 testst()
-pre_processing(y)
-print(y)
-tts(y)
-print("hier ist die subtest " + submissionList[SubTest].url)
-make_suitable_background_video(get_thirty_minute_video())
-create_final_video(zus_video_name, zus_audio_name)
+#pre_processing(y)
+#print(y)
+#tts(y)
+#print("hier ist die subtest " + submissionList[SubTest].url)
+#make_suitable_background_video(get_thirty_minute_video())
+#create_final_video(zus_video_name, zus_audio_name)
 print("done")
