@@ -3,6 +3,7 @@ import glob
 import os
 import math
 import time
+import pysrt
 import pyttsx3
 import random
 import gtts
@@ -132,12 +133,11 @@ def add_ten_sekunden(video):
 def create_final_video(video, subaudio):
     audio = video_editor.AudioFileClip(subaudio)
     clip = video_editor.VideoFileClip(video)
-    print(fs)
-    subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
-    subtitle = subtitle.set_duration(audio.duration)
+    #subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
+    #subtitle = subtitle.set_duration(audio.duration)
     clip = clip.volumex(0.0)
     clip = clip.set_audio(audio)
-    clip = video_editor.CompositeVideoClip([clip,subtitle])
+    #clip = video_editor.CompositeVideoClip([clip,subtitle])
     clip.write_videofile(final_video_name)
     clip.close()
     #lösch den background_video muss noch gemacht werden
@@ -168,71 +168,75 @@ def main():
             #einfach warten bis der nächte tag kommt dann nochmla was posten
             x = x
 
-def testst():
-    #tx = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
-    #tx.save_frame("test.png")
-    #v = v.write_images_sequence("frame%03d.png")
-    #v.write_videofile("test.mp4")
-    #print ( [frame[0,:,0].max()
-    #         for frame in v.iter_frames()])
-    #generator = lambda fs: video_editor.TextClip(fs, font='Georgia-Regular', fontsize=24, color='white')
-    sub = SubtitlesClip("06.03.2023.final.srt")
-    #print(sub)
-    z  = ""
-    z = str(sub) 
-    stl = [] 
-    stl = z.split("\n")
-    print(1)
-    print("\n")
-    print(stl[0])
-    print("\n")
-    print("\n")
-    print("\n")
-    print(stl[1])
-    print("\n")
-    print("\n")
-    print("\n")
-    print(2)
-    print("\n")
-    stl = z.split(" - ")
-    print(stl[0])
-    print("\n")
-    print("\n")
-    print("\n")
-    print(stl[1])
-    print("\n")
-    print("\n")
-    print("\n")
-    print(3)
-    print("\n")
-    stl = z.split(" ")
-    print(stl[0])
-    print("\n")
-    print(stl[1])
-    print("\n")
-    print(stl[2])
-    print("\n")
-    print(stl[3])
-    print("\n")
-    print(stl[4])
 
-    #i=0
-    #for x in stl:
-        #print("this is form the list: " + str(i)+"  "  + x + "\n")
-        #i+=1
-        #time.sleep(2)
+"""
+def testst():
+    
+    sub = SubtitlesClip("06.03.2023.final.srt")
+    
+    z  = ""
+    z = str(sub)
+    print(sub) 
+    stl = [] 
+    stl2 = []
+    stl3 = []
+    stl = z.split(" ")    
+    # Erstellen einer Liste von Listen
+    stl2 = [x.split("\n") for x in stl]
+    # Erstellen einer flachen Liste
+    stl3 = [element for inner_list in stl2 for element in inner_list]
+    zahlen_liste = []
+    for element in stl3:
+        if element.isnumeric() or (element.count(".") == 1 and element.replace(".", "").isnumeric()):
+            zahlen_liste.append(float(element))
+    # String in Zeilen aufteilen
+    zeilen = z.split("\n")
+
+    # Letzte Zeilen auswählen und in eine Liste kopieren
+    letzte_zeilen = [zeile for zeile in zeilen if zeile.endswith(",") or zeile.endswith(".") or zeile.endswith("\"")]
+    print(letzte_zeilen)
+    
+    
     #subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('top')
     #subtitle = subtitle.set_duration(v.duration)
     #v = video_editor.VideoFileClip("06.03.2023.final.mp4")
     #final = video_editor.CompositeVideoClip([v, sub])
     #final.write_videofile("final10000.mp4", fps=v.fps)
+    
+def testst():
+    srt_file = "06.03.2023.final.srt"
+    video_file = "06.03.2023.final.mp4"
+    video = VideoFileClip(video_file)
+    
+    subs = pysrt.open(srt_file)
+    
+    if len(subs) > 0:
+        # Verarbeiten Sie den Inhalt der SRT-Datei
+        fps = video.fps  # Beispiel-FPS für das Video
+        subs_list = [(((sub.start.ordinal / 1000), (sub.end.ordinal / 1000)), sub.text.replace('\n', ' ')) for sub in subs]
+    else:
+        print('Die SRT-Datei ist leer oder konnte nicht geöffnet werden.')
+        return
 
-#y = hotsub()
-testst()
-#pre_processing(y)
+    subtitles = SubtitlesClip(subs_list, video.size)
+    subtitles = subtitles.set_position(('center', 'bottom'))
+
+    video_with_subtitles = video.set_audio(None).set_duration(subtitles.duration)
+    video_with_subtitles = video_with_subtitles.set_fps(fps)
+    video_with_subtitles = video_with_subtitles.add_audio(video.audio)
+
+    final_video = video_with_subtitles.set_audio(video.audio)
+    final_video = final_video.set_duration(video.duration)
+    final_video = final_video.set_fps(fps)
+
+    final_video.write_videofile('example_with_subtitles.mp4', audio_codec='aac')
+
+"""
+y = hotsub()
+pre_processing(y)
 #print(y)
-#tts(y)
+tts(y)
 #print("hier ist die subtest " + submissionList[SubTest].url)
-#make_suitable_background_video(get_thirty_minute_video())
-#create_final_video(zus_video_name, zus_audio_name)
+make_suitable_background_video(get_thirty_minute_video())
+create_final_video(zus_video_name, zus_audio_name)
 print("done")
