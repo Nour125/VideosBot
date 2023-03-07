@@ -15,6 +15,12 @@ from praw.models import MoreComments
 from wand.image import Image
 import wand.api
 from moviepy.video.tools.subtitles import SubtitlesClip
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
 
@@ -29,6 +35,9 @@ commentsList = []
 submissionList = []
 commentwords = list()
 thirty_minute_videos = ["minecraft.mp4","Rocket_League.mp4"]
+
+s = Service("chromedriver.exe")
+webDriver = webdriver.Chrome( service = s )
 
 
 lenOfCom = 0
@@ -144,7 +153,7 @@ def create_final_video(video, subaudio):
     
 
 
-#funktioniert nicht obwohl ich den schliße. Es kommt diese fehler [WinError 32] Der Prozess
+#funktioniert nicht obwohl ich alles schliße. Es kommt diese fehler [WinError 32] Der Prozess
 #kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird
 #def delete_background_video(name):
     #path = os.path.abspath(name)
@@ -152,11 +161,37 @@ def create_final_video(video, subaudio):
     #video_editor.VideoClip.close(name)
     #os.remove(path)
 
+def video_with_subtitels():
+    webDriver.get("https://www.veed.io/login")
+    webDriver.implicitly_wait(10)
+    email = "rbot629@gmail.com"
+    passwort = "123poi??"
+    def login():
+        cookies_Butten = webDriver.find_element(By.ID , "onetrust-accept-btn-handler")
+        cookies_Butten.click()
+        login_Butten = webDriver.find_element(By.XPATH,"/html/body/div[1]/main/div/div[1]/div/div[1]/form/div[1]/button")
+        login_Butten.click()
+        webDriver.switch_to.new_window("https://accounts.google.com/o/oauth2/v2/auth/identifier?gsiwebsdk=3&client_id=53533895812-ghiehgb03dtruurb1caasu8ko8qdtpld.apps.googleusercontent.com&scope=openid%20profile%20email%20email&redirect_uri=storagerelay%3A%2F%2Fhttps%2Fwww.veed.io%3Fid%3Dauth266303&prompt=consent&access_type=offline&response_type=code&include_granted_scopes=true&enable_serial_consent=true&service=lso&o2v=2&flowName=GeneralOAuthFlow")
+        mailfeld = webDriver.find_element(By.XPATH,"/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input")
+        mailfeld.send_keys(email)
+    login()
+    time.sleep(10)
 
 
 
-#mach die main methode
 
+
+#y = hotsub()
+#pre_processing(y)
+#print(y)
+#tts(y)
+#print("hier ist die subtest " + submissionList[SubTest].url)
+#make_suitable_background_video(get_thirty_minute_video())
+#create_final_video(zus_video_name, zus_audio_name)
+video_with_subtitels()
+print("done")
+
+# diese ist dafür da das ich einmal pro Tag poste
 
 def main():
     while(True):
@@ -167,6 +202,8 @@ def main():
         while(datetime.date.day() == day ):
             #einfach warten bis der nächte tag kommt dann nochmla was posten
             x = x
+
+
 
 
 """
@@ -202,7 +239,7 @@ def testst():
     #v = video_editor.VideoFileClip("06.03.2023.final.mp4")
     #final = video_editor.CompositeVideoClip([v, sub])
     #final.write_videofile("final10000.mp4", fps=v.fps)
-    
+
 def testst():
     srt_file = "06.03.2023.final.srt"
     video_file = "06.03.2023.final.mp4"
@@ -232,11 +269,4 @@ def testst():
     final_video.write_videofile('example_with_subtitles.mp4', audio_codec='aac')
 
 """
-y = hotsub()
-pre_processing(y)
-#print(y)
-tts(y)
-#print("hier ist die subtest " + submissionList[SubTest].url)
-make_suitable_background_video(get_thirty_minute_video())
-create_final_video(zus_video_name, zus_audio_name)
-print("done")
+
