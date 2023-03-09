@@ -36,8 +36,6 @@ submissionList = []
 commentwords = list()
 thirty_minute_videos = ["minecraft.mp4","Rocket_League.mp4"]
 
-s = Service("chromedriver.exe")
-webDriver = webdriver.Chrome( service = s )
 
 
 lenOfCom = 0
@@ -83,6 +81,9 @@ def hotsub():
             i += 1
             com = topcom.body
             commentwords = com.split(" ")
+        
+        global c
+        c = topcom
 
         if ((i+1) == len(commentsList)):
             subfound = False
@@ -162,16 +163,19 @@ def create_final_video(video, subaudio):
     #os.remove(path)
 
 def video_with_subtitels():
+    s = Service("chromedriver.exe")
+    webDriver = webdriver.Chrome( service = s )
     webDriver.get("https://www.veed.io/login")
     webDriver.implicitly_wait(10)
     email = "rbot629@gmail.com"
     passwort = "123poi??"
     def login():
+        #das funktioniert nicht weil es immer eine neue fenster name erstellt
         cookies_Butten = webDriver.find_element(By.ID , "onetrust-accept-btn-handler")
         cookies_Butten.click()
         login_Butten = webDriver.find_element(By.XPATH,"/html/body/div[1]/main/div/div[1]/div/div[1]/form/div[1]/button")
         login_Butten.click()
-        webDriver.switch_to.new_window("https://accounts.google.com/o/oauth2/v2/auth/identifier?gsiwebsdk=3&client_id=53533895812-ghiehgb03dtruurb1caasu8ko8qdtpld.apps.googleusercontent.com&scope=openid%20profile%20email%20email&redirect_uri=storagerelay%3A%2F%2Fhttps%2Fwww.veed.io%3Fid%3Dauth266303&prompt=consent&access_type=offline&response_type=code&include_granted_scopes=true&enable_serial_consent=true&service=lso&o2v=2&flowName=GeneralOAuthFlow")
+        webDriver.switch_to._w3c_window("https://accounts.google.com/o/oauth2/v2/auth/identifier?gsiwebsdk=3&client_id=53533895812-ghiehgb03dtruurb1caasu8ko8qdtpld.apps.googleusercontent.com&scope=openid%20profile%20email%20email&redirect_uri=storagerelay%3A%2F%2Fhttps%2Fwww.veed.io%3Fid%3Dauth266303&prompt=consent&access_type=offline&response_type=code&include_granted_scopes=true&enable_serial_consent=true&service=lso&o2v=2&flowName=GeneralOAuthFlow")
         mailfeld = webDriver.find_element(By.XPATH,"/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input")
         mailfeld.send_keys(email)
     login()
@@ -181,14 +185,15 @@ def video_with_subtitels():
 
 
 
-#y = hotsub()
+y = hotsub()
 #pre_processing(y)
-#print(y)
+print(y)
 #tts(y)
-#print("hier ist die subtest " + submissionList[SubTest].url)
+print("hier ist die subtest " + submissionList[SubTest].url)
+print("hier ist die subtest " + c.id)
 #make_suitable_background_video(get_thirty_minute_video())
 #create_final_video(zus_video_name, zus_audio_name)
-video_with_subtitels()
+#video_with_subtitels()
 print("done")
 
 # diese ist dafür da das ich einmal pro Tag poste
