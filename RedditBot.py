@@ -21,6 +21,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+import pvleopard
+leopard = pvleopard.create(access_key= "kdCYPIJyrL61fwhTHvWtkIL14Gzs58/X2CvwpdGQf3zjkASJNjEKxA==")
+
 
 video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
 
@@ -186,13 +189,13 @@ def video_with_subtitels():
 
 
 y = hotsub()
-#pre_processing(y)
+pre_processing(y)
 print(y)
-#tts(y)
+tts(y)
 print("hier ist die subtest " + submissionList[SubTest].url)
 print("hier ist die subtest " + c.id)
-#make_suitable_background_video(get_thirty_minute_video())
-#create_final_video(zus_video_name, zus_audio_name)
+make_suitable_background_video(get_thirty_minute_video())
+create_final_video(zus_video_name, zus_audio_name)
 #video_with_subtitels()
 print("done")
 
