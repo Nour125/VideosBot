@@ -1,12 +1,17 @@
-import pvleopard
-leopard = pvleopard.create(access_key= "kdCYPIJyrL61fwhTHvWtkIL14Gzs58/X2CvwpdGQf3zjkASJNjEKxA==")
-transcript, words = leopard.process_file("11.03.2023.mp3")
+import autosub
+import moviepy.editor
+import ffmpeg
+import subprocess
 
-subtitle_path = "11.03.2023.mp3"
+#autosub.generate_subtitles(r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot\11.03.2023.mp3")
+subprocess.run(["cd ", r"C:\Users\nourm\OneDrive\Desktop\Nour"])
+
+print(p.communicate())
 
 
 
-with open(subtitle_path, 'w') as f:
-    f.write(property.to_srt(words))
-
-
+"""
+    if not which("ffmpeg.exe"):
+        print("ffmpeg: Executable not found on machine.")
+        raise Exception("Dependency not found: ffmpeg")
+"""
