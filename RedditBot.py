@@ -21,8 +21,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import pvleopard
-leopard = pvleopard.create(access_key= "kdCYPIJyrL61fwhTHvWtkIL14Gzs58/X2CvwpdGQf3zjkASJNjEKxA==")
+import ffmpeg
+import subprocess
 
 
 video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
@@ -31,8 +31,10 @@ engine = pyttsx3.init()
 date = datetime.datetime.now()
 mp3 = ".mp3"
 mp4 = ".mp4"
+srt = ".srt"
 zus_audio_name = date.strftime("%d.%m.%Y") + mp3
 zus_video_name = date.strftime("%d.%m.%Y") + mp4
+zus_srt_name   = date.strftime("%d.%m.%Y") + srt
 final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4 
 commentsList = []
 submissionList = []
@@ -145,6 +147,17 @@ def add_ten_sekunden(video):
 # can you pass a video?? das kann das problem sein vllt mach alles in eine methode!
 def create_final_video(video, subaudio):
     audio = video_editor.AudioFileClip(subaudio)
+    """
+    command = "cd C:\\Python311\\Scripts && autosub C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + zus_audio_name
+    subprocess.run(command, shell=True)
+    (
+        ffmpeg
+        .input(video)
+        .filter("subtitles", zus_srt_name)
+        .output(final_video_name)
+        .run()
+    )
+    """
     clip = video_editor.VideoFileClip(video)
     #subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
     #subtitle = subtitle.set_duration(audio.duration)
