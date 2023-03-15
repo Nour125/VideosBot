@@ -147,18 +147,12 @@ def add_ten_sekunden(video):
 # can you pass a video?? das kann das problem sein vllt mach alles in eine methode!
 def create_final_video(video, subaudio):
     audio = video_editor.AudioFileClip(subaudio)
-    """
-    command = "cd C:\\Python311\\Scripts && autosub C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + zus_audio_name
-    subprocess.run(command, shell=True)
-    (
-        ffmpeg
-        .input(video)
-        .filter("subtitles", zus_srt_name)
-        .output(final_video_name)
-        .run()
-    )
-    """
-    clip = video_editor.VideoFileClip(video)
+    # command to extract subtitle from video and save as .srt file
+    subprocess.run(['ffmpeg', '-i', video, '-map', '0:s:0', 'subtitles_en-US_33678.srt'])
+    # command to add subtitle to video and create a new video with subtitle
+    subprocess.run(['ffmpeg', '-i', video, '-vf', "subtitles=subtitles_en-US_33678.srt:force_style='Alignment=10,Fontsize=24,MarginV=20'",
+                    '-c:a', 'copy', 'video_with_subtitle.mp4'])
+    clip = video_editor.VideoFileClip("video_with_subtitle.mp4")
     #subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
     #subtitle = subtitle.set_duration(audio.duration)
     clip = clip.volumex(0.0)
