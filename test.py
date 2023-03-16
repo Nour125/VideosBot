@@ -37,37 +37,58 @@ final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4
 input_file = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + zus_audio_name
 output_file = r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot" +zus_srt_name
 email = "rbot629@gmail.com"
+
+def find_By_ID(webdriver, data):
+    element = webdriver.find_elements(By.ID , data)
+    if element:
+        return element
+    else:
+        return False
+
+def find_By_XPATH(webdriver, data):
+    element = webdriver.find_elements(By.XPATH , data)
+    if element:
+        return element
+    else:
+        return False
+
+
 def get_srt():
     s = Service("chromedriver.exe")
     webDriver = webdriver.Chrome( service = s )
     webDriver.get("https://www.subtitlevideo.com/")
     webDriver.implicitly_wait(10)
+    
+    WebDriverWait(webDriver, 5).until(webDriver.find_element(By.ID , "language_in"))
     language_Butten = webDriver.find_element(By.ID , "language_in")
     language_Butten.send_keys("en-US")
-    
+
+    WebDriverWait(webDriver, 5).until(find_By_ID(webDriver,"fileToUpload"))
     upload_Butten = webDriver.find_element(By.ID , "fileToUpload")
     upload_Butten.send_keys(input_file)
     
+    WebDriverWait(webDriver, 5).until(find_By_XPATH(webDriver,"/html/body/div[2]/div/form/fieldset/div[4]"))
     row_progress_Butten = webDriver.find_element(By.XPATH , "/html/body/div[2]/div/form/fieldset/div[4]")
     while(int(row_progress_Butten.text.replace("%",""))<100):
         time.sleep(1)
     
+    WebDriverWait(webDriver, 5).until(find_By_ID(webDriver,"email"))
     email_Butten = webDriver.find_element(By.ID , "email")
     email_Butten.send_keys(email)
     
+    WebDriverWait(webDriver, 5).until(find_By_ID(webDriver,"convert_video"))
     convert_video_Butten = webDriver.find_element(By.ID , "convert_video")
     convert_video_Butten.click()
     
+    WebDriverWait(webDriver, 5).until(find_By_XPATH(webDriver,"/html/body/div[2]/div/div[4]/div[3]/table/tr[2]/td[5]"))
     convert_video_done_Butten = webDriver.find_element(By.XPATH , "/html/body/div[2]/div/div[4]/div[3]/table/tr[2]/td[5]")
-    
-    while(convert_video_done_Butten.text != "done"):
-        time.sleep(10)
-    
+    print(convert_video_done_Butten.text)
+    #time.sleep(20)
+    while(str(convert_video_done_Butten.text) != "done"):
+        WebDriverWait(webDriver, 5).until(find_By_XPATH(webDriver,"/html/body/div[2]/div/div[4]/div[3]/table/tr[2]/td[5]"))
+        print("this is the sit u want to print:"+ convert_video_done_Butten.text)
 
-    time.sleep(5)
-    
-    print("this is the sit u want to print:"+row_progress_Butten.text)
-    
+    time.sleep(5)    
     
 
 
