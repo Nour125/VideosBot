@@ -34,16 +34,15 @@ mp4 = ".mp4"
 srt = ".srt"
 zus_audio_name = date.strftime("%d.%m.%Y") + mp3
 zus_video_name = date.strftime("%d.%m.%Y") + mp4
-zus_srt_name   = date.strftime("%d.%m.%Y") + srt
+
 final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4 
 commentsList = []
 submissionList = []
 commentwords = list()
 thirty_minute_videos = ["minecraft.mp4","Rocket_League.mp4"]
-
-
-
 lenOfCom = 0
+
+
 reddit = praw.Reddit(
     password="123poi??",
     username="ReadB629",
@@ -72,7 +71,7 @@ def hotsub():
         global SubTest
         SubTest = x
 
-        #git Comment
+        #get Comment
         cursub.comments.replace_more(limit = 0)
         #submission.comment_sort = "new"  #Macht iwie nichts :(
         commentsList = list(cursub.comments) 
@@ -113,7 +112,7 @@ def tts (text):
 
 def get_audio():
     #hier musst du die sub aufrufen damit du den name bekommst
-    return video_editor.AudioFileClip("01.03.2023.mp3")
+    return video_editor.AudioFileClip(zus_audio_name)
 
 def get_thirty_minute_video():
     r = random.randrange( 0 , len(thirty_minute_videos) )
@@ -144,17 +143,59 @@ def add_ten_sekunden(video):
     final_clip = video_editor.concatenate_videoclips([video,ten_sec_clip])
     return final_clip
 
-# can you pass a video?? das kann das problem sein vllt mach alles in eine methode!
-def create_final_video(video, subaudio):
-    audio = video_editor.AudioFileClip(subaudio)
-    # command to extract subtitle from video and save as .srt file
-    subprocess.run(['ffmpeg', '-i', video, '-map', '0:s:0', 'subtitles_en-US_33678.srt'])
+def get_srt():
+    email = "bopaxi6270@kaudat.com"
+    s = Service("chromedriver.exe")
+    chromeOptions = webdriver.ChromeOptions()
+    prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
+    chromeOptions.add_experimental_option("prefs",prefs)
+    webDriver = webdriver.Chrome( service = s, options = chromeOptions )
+    
+
+    webDriver.get("https://www.subtitlevideo.com/")
+    webDriver.implicitly_wait(20)
+    
+ 
+    language_Butten = webDriver.find_element(By.ID , "language_in")
+    language_Butten.send_keys("English (United States)-English (United States)")
+
+    upload_Butten = webDriver.find_element(By.ID , "fileToUpload")
+    input_file = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + zus_audio_name
+    upload_Butten.send_keys(input_file)
+    
+    row_progress_Butten = webDriver.find_element(By.XPATH , "/html/body/div[2]/div/form/fieldset/div[4]")
+    while(int(row_progress_Butten.text.replace("%",""))<100):
+        time.sleep(10)
+    
+    email_Butten = webDriver.find_element(By.ID , "email")
+    email_Butten.send_keys(email)
+    
+    convert_video_Butten = webDriver.find_element(By.ID , "convert_video")
+    convert_video_Butten.click()
+    time.sleep(60)
+    
+    convert_video_done_Butten = webDriver.find_element(By.LINK_TEXT , "en-US subtitles")
+
+    global zus_srt_name
+    zus_srt_name =  convert_video_done_Butten.get_attribute('href').removeprefix("https://files.subtitlevideo.com/subtitles/")
+    convert_video_done_Butten.click()
+    time.sleep(10)
+
+def add_subtitles(video, subtitles):
+    
     # command to add subtitle to video and create a new video with subtitle
-    subprocess.run(['ffmpeg', '-i', video, '-vf', "subtitles=subtitles_en-US_33678.srt:force_style='Alignment=10,Fontsize=24,MarginV=20'",
-                    '-c:a', 'copy', 'video_with_subtitle.mp4'])
+    l = "subtitles="+subtitles+":force_style='Alignment=10,Fontsize=24,MarginV=20'"
+    subprocess.run(['ffmpeg', '-i', video, '-vf', l,
+                        '-c:a', 'copy', 'video_with_subtitle.mp4'])
+  
+
+
+# can you pass a video?? das kann das problem sein vllt mach alles in eine methode!
+def create_final_video(video, subaudio, subtitles):
+    audio = video_editor.AudioFileClip(subaudio)
+    add_subtitles(video,subtitles)
+
     clip = video_editor.VideoFileClip("video_with_subtitle.mp4")
-    #subtitle = video_editor.TextClip(fs, fontsize=30, color='white', bg_color='black').set_pos('center')
-    #subtitle = subtitle.set_duration(audio.duration)
     clip = clip.volumex(0.0)
     clip = clip.set_audio(audio)
     #clip = video_editor.CompositeVideoClip([clip,subtitle])
@@ -202,8 +243,8 @@ tts(y)
 print("hier ist die subtest " + submissionList[SubTest].url)
 print("hier ist die subtest " + c.id)
 make_suitable_background_video(get_thirty_minute_video())
-create_final_video(zus_video_name, zus_audio_name)
-#video_with_subtitels()
+get_srt()
+create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
 print("done")
 
 # diese ist dafür da das ich einmal pro Tag poste
