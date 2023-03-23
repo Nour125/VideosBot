@@ -201,7 +201,7 @@ def create_final_video(video, subaudio, subtitles):
     clip = clip.volumex(0.0)
     clip = clip.set_audio(audio)
     clip.write_videofile(final_video_name)
-    video_editor.VideoFileClip(clip).close()
+    clip.close() #du musst diese video schliessen 
     audio.close()
    
 

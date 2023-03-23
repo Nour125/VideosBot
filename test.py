@@ -46,7 +46,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import ffmpeg
 import subprocess
-
+import re
 
 # Define the input and output file paths
 #subprocess.run(['ffmpeg', '-i','15.03.2023.mp3' , '15.03.2023.wav'])
@@ -60,22 +60,48 @@ final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4
 
 
 
+def get_srt():
+    email = "bopaxi6270@kaudat.com"
+    s = Service("chromedriver.exe")
+    chromeOptions = webdriver.ChromeOptions()
+    prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
+    chromeOptions.add_experimental_option("prefs",prefs)
+    webDriver = webdriver.Chrome( service = s, options = chromeOptions )
+    
+
+    webDriver.get("https://www.subtitlevideo.com/")
+    webDriver.implicitly_wait(20)
+    
+ 
+    language_Butten = webDriver.find_element(By.ID , "language_in")
+    language_Butten.send_keys("English (United States)-English (United States)")
+
+    upload_Butten = webDriver.find_element(By.ID , "fileToUpload")
+    input_file = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + zus_audio_name
+    upload_Butten.send_keys(input_file)
+    
+    row_progress_Butten = webDriver.find_element(By.XPATH , "/html/body/div[2]/div/form/fieldset/div[4]")
+    while(int(row_progress_Butten.text.replace("%",""))<100):
+        time.sleep(10)
+    
+    email_Butten = webDriver.find_element(By.ID , "email")
+    email_Butten.send_keys(email)
+    
+    convert_video_Butten = webDriver.find_element(By.ID , "convert_video")
+    convert_video_Butten.click()
+
+    time_left = webDriver.find_element(By.XPATH, "/html/body/div[2]/div/div[1]/div/p")
+    time_lef_num = time_left.text
+    time_lef_num = re.findall(r'\d+',time_lef_num)
+    print("hier hiehr hierh hier"+str(time_lef_num))
+    time.sleep(100)
 
 
 
-subprocess.run("dir", shell=True, check=True)
-subprocess.run("del /f test.mp3", shell=True, check=True)
-#subprocess.run('cd C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot', shell=True, check=True)
-#subprocess.run("dir", shell=True, check=True)
 
 
 
-
-
-
-
-
-
+get_srt()
 print("done")
 
 
