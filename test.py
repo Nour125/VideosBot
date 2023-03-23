@@ -21,6 +21,32 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import datetime
+import datetime
+import glob
+import os
+import math
+import time
+import pysrt
+import pyttsx3
+import random
+import gtts
+from playsound import playsound
+from gtts.tokenizer import pre_processors
+import moviepy.editor as video_editor
+import praw
+from praw.models import MoreComments
+from wand.image import Image
+import wand.api
+from moviepy.video.tools.subtitles import SubtitlesClip
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import ffmpeg
+import subprocess
+
 
 # Define the input and output file paths
 #subprocess.run(['ffmpeg', '-i','15.03.2023.mp3' , '15.03.2023.wav'])
@@ -35,15 +61,37 @@ final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4
 
 
 
+
+
+subprocess.run("dir", shell=True, check=True)
+subprocess.run("del /f test.mp3", shell=True, check=True)
+#subprocess.run('cd C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot', shell=True, check=True)
+#subprocess.run("dir", shell=True, check=True)
+
+
+
+
+
+
+
+
+
+print("done")
+
+
+
+
+
+
+"""
+
 s = "subtitles_en-US_34241.srt"
 l = "subtitles="+s+":force_style='Alignment=10,Fontsize=24,MarginV=20'"
 v= "23.03.2023.mp4"
 subprocess.run(['ffmpeg', '-i', v , '-vf', l,
                     '-c:a', 'copy', 'video_with_subtitle.mp4'])
 
-print("done")
 
-"""
 # Create a speech recognition object
 r = sr.Recognizer()
 
