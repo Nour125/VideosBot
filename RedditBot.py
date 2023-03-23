@@ -101,10 +101,11 @@ def hotsub():
 
 
 def pre_processing(text):
-    pre_processors.tone_marks(text)
-    pre_processors.end_of_line(text)
-    pre_processors.abbreviations(text)
-    pre_processors.word_sub(text)
+    t = pre_processors.tone_marks(text)
+    t = pre_processors.end_of_line(t)
+    t = pre_processors.abbreviations(t)
+    t = pre_processors.word_sub(t)
+    return t
 
 def tts (text):
     x = gtts.gTTS(text, lang ='en', tld ='us')
@@ -181,12 +182,14 @@ def get_srt():
     convert_video_done_Butten.click()
     time.sleep(10)
 
+
+# command to add subtitle to video and create a new video with subtitle
 def add_subtitles(video, subtitles):
-    
-    # command to add subtitle to video and create a new video with subtitle
     l = "subtitles="+subtitles+":force_style='Alignment=10,Fontsize=24,MarginV=20'"
     subprocess.run(['ffmpeg', '-i', video, '-vf', l,
                         '-c:a', 'copy', 'video_with_subtitle.mp4'])
+    
+    
   
 
 
@@ -194,57 +197,40 @@ def add_subtitles(video, subtitles):
 def create_final_video(video, subaudio, subtitles):
     audio = video_editor.AudioFileClip(subaudio)
     add_subtitles(video,subtitles)
-
     clip = video_editor.VideoFileClip("video_with_subtitle.mp4")
     clip = clip.volumex(0.0)
     clip = clip.set_audio(audio)
-    #clip = video_editor.CompositeVideoClip([clip,subtitle])
     clip.write_videofile(final_video_name)
-    clip.close()
-    #lösch den background_video muss noch gemacht werden
-    
+    video_editor.VideoFileClip(clip).close()
+    audio.close()
+   
 
 
-#funktioniert nicht obwohl ich alles schliße. Es kommt diese fehler [WinError 32] Der Prozess
-#kann nicht auf die Datei zugreifen, da sie von einem anderen Prozess verwendet wird
-#def delete_background_video(name):
-    #path = os.path.abspath(name)
-    #print(path)
-    #video_editor.VideoClip.close(name)
-    #os.remove(path)
+#du willst ja nicht alles löschen bis auf das end produtk
+def delete_unnecessary_stuff():
+    delsrt = "del /f " + zus_srt_name
+    delv   = "del /f " + zus_video_name
+    dela   = "del /f " + zus_audio_name
 
-def video_with_subtitels():
-    s = Service("chromedriver.exe")
-    webDriver = webdriver.Chrome( service = s )
-    webDriver.get("https://www.veed.io/login")
-    webDriver.implicitly_wait(10)
-    email = "rbot629@gmail.com"
-    passwort = "123poi??"
-    def login():
-        #das funktioniert nicht weil es immer eine neue fenster name erstellt
-        cookies_Butten = webDriver.find_element(By.ID , "onetrust-accept-btn-handler")
-        cookies_Butten.click()
-        login_Butten = webDriver.find_element(By.XPATH,"/html/body/div[1]/main/div/div[1]/div/div[1]/form/div[1]/button")
-        login_Butten.click()
-        webDriver.switch_to._w3c_window("https://accounts.google.com/o/oauth2/v2/auth/identifier?gsiwebsdk=3&client_id=53533895812-ghiehgb03dtruurb1caasu8ko8qdtpld.apps.googleusercontent.com&scope=openid%20profile%20email%20email&redirect_uri=storagerelay%3A%2F%2Fhttps%2Fwww.veed.io%3Fid%3Dauth266303&prompt=consent&access_type=offline&response_type=code&include_granted_scopes=true&enable_serial_consent=true&service=lso&o2v=2&flowName=GeneralOAuthFlow")
-        mailfeld = webDriver.find_element(By.XPATH,"/html/body/div[1]/div[1]/div[2]/div/div[2]/div/div/div[2]/div/div[1]/div/form/span/section/div/div/div[1]/div/div[1]/div/div[1]/input")
-        mailfeld.send_keys(email)
-    login()
-    time.sleep(10)
-
+    subprocess.run(delsrt , shell=True, check=True)
+    subprocess.run(delv, shell=True, check=True)
+    subprocess.run(dela, shell=True, check=True)
+    subprocess.run("del /f video_with_subtitle.mp4", shell=True, check=True)
 
 
 
 
 y = hotsub()
-pre_processing(y)
+doentext = pre_processing(y)
 print(y)
-tts(y)
+print(doentext)
+tts(doentext)
 print("hier ist die subtest " + submissionList[SubTest].url)
 print("hier ist die subtest " + c.id)
 make_suitable_background_video(get_thirty_minute_video())
 get_srt()
 create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
+delete_unnecessary_stuff()
 print("done")
 
 # diese ist dafür da das ich einmal pro Tag poste
