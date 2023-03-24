@@ -1,6 +1,7 @@
 import datetime
 import glob
 import os
+import re
 import math
 import time
 import pysrt
@@ -23,7 +24,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import ffmpeg
 import subprocess
-
+import instagrapi
 
 video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
 
@@ -34,7 +35,7 @@ mp4 = ".mp4"
 srt = ".srt"
 zus_audio_name = date.strftime("%d.%m.%Y") + mp3
 zus_video_name = date.strftime("%d.%m.%Y") + mp4
-
+zus_thumbnail_name ="C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.strftime("%d.%m.%Y") + ".png"
 final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4 
 commentsList = []
 submissionList = []
@@ -86,8 +87,8 @@ def hotsub():
             com = topcom.body
             commentwords = com.split(" ")
         
-        global c
-        c = topcom
+        global selected_comment
+        selected_comment = topcom
 
         if ((i+1) == len(commentsList)):
             subfound = False
@@ -145,7 +146,7 @@ def add_ten_sekunden(video):
     return final_clip
 
 def get_srt():
-    email = "bopaxi6270@kaudat.com"
+    email = "bopaxi6270@kaudat.com" 
     s = Service("chromedriver.exe")
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
@@ -176,7 +177,6 @@ def get_srt():
     time.sleep(60)
     
     convert_video_done_Butten = webDriver.find_element(By.LINK_TEXT , "en-US subtitles")
-
     global zus_srt_name
     zus_srt_name =  convert_video_done_Butten.get_attribute('href').removeprefix("https://files.subtitlevideo.com/subtitles/")
     convert_video_done_Butten.click()
@@ -209,28 +209,46 @@ def create_final_video(video, subaudio, subtitles):
 #du willst ja nicht alles löschen bis auf das end produtk
 def delete_unnecessary_stuff():
     delsrt = "del /f " + zus_srt_name
-    delv   = "del /f " + zus_video_name
-    dela   = "del /f " + zus_audio_name
+    delv   = "del /f " + zus_video_name #wird nicht gelöscht :(
+    dela   = "del /f " + zus_audio_name #wird nicht gelöscht :(
 
     subprocess.run(delsrt , shell=True, check=True)
     subprocess.run(delv, shell=True, check=True)
     subprocess.run(dela, shell=True, check=True)
     subprocess.run("del /f video_with_subtitle.mp4", shell=True, check=True)
 
+def get_thumbnail():
+    s = Service("chromedriver.exe")
+    chromeOptions = webdriver.ChromeOptions()
+    prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
+    chromeOptions.add_experimental_option("prefs",prefs)
+    webDriver = webdriver.Chrome( service = s, options = chromeOptions )
+
+    webDriver.get(submissionList[SubTest].url)
+    webDriver.implicitly_wait(10)
+    #time.sleep(100)
+    bild = webDriver.find_element(By.LINK_TEXT,selected_comment.body_html)
+    
+    bild.screenshot(zus_thumbnail_name)
+
+    
+
 
 
 
 y = hotsub()
-doentext = pre_processing(y)
+#doentext = pre_processing(y)
 print(y)
-print(doentext)
-tts(doentext)
 print("hier ist die subtest " + submissionList[SubTest].url)
-print("hier ist die subtest " + c.id)
-make_suitable_background_video(get_thirty_minute_video())
-get_srt()
-create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
-delete_unnecessary_stuff()
+print("hier ist die subtest " + str(selected_comment.body_html))
+get_thumbnail()
+#print(doentext)
+#tts(doentext)
+
+#make_suitable_background_video(get_thirty_minute_video())
+#get_srt()
+#create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
+#delete_unnecessary_stuff()
 print("done")
 
 # diese ist dafür da das ich einmal pro Tag poste

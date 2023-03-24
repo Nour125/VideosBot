@@ -47,6 +47,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import ffmpeg
 import subprocess
 import re
+import instagrapi
+from instagrapi import Client
 
 # Define the input and output file paths
 #subprocess.run(['ffmpeg', '-i','15.03.2023.mp3' , '15.03.2023.wav'])
@@ -60,8 +62,44 @@ final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4
 
 
 
+def post_video():
+    email = "rbot629@gmail.com"
+    password = "123poi??"
+    s = Service("chromedriver.exe")
+    chromeOptions = webdriver.ChromeOptions()
+    prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
+    chromeOptions.add_experimental_option("prefs",prefs)
+    webDriver = webdriver.Chrome( service = s, options = chromeOptions )
+    
+
+    webDriver.get("https://www.tiktok.com")
+    webDriver.implicitly_wait(20)
+    
+ 
+    language_Butten = webDriver.find_element(By.ID , "language_in")
+    language_Butten.send_keys("English (United States)-English (United States)")
+
+    
+
+
+
+
+def post_video_on_insta():
+    ich = instagrapi.Client()
+    ich.login('trendingtalks_01', '123poi??')
+    video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + final_video_name
+    media = ich.clip_upload(
+        video_path,
+        "Test caption for photo with #hashtags and mention users such @adw0rd",
+    )
+
+
+
+
+
+
 def get_srt():
-    email = "bopaxi6270@kaudat.com"
+    email = "bopaxi6270@kaudat.com" 
     s = Service("chromedriver.exe")
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
@@ -74,27 +112,10 @@ def get_srt():
     
  
     language_Butten = webDriver.find_element(By.ID , "language_in")
+    language_Butten.screenshot(r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot\thumbnail.png")
     language_Butten.send_keys("English (United States)-English (United States)")
 
-    upload_Butten = webDriver.find_element(By.ID , "fileToUpload")
-    input_file = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + zus_audio_name
-    upload_Butten.send_keys(input_file)
-    
-    row_progress_Butten = webDriver.find_element(By.XPATH , "/html/body/div[2]/div/form/fieldset/div[4]")
-    while(int(row_progress_Butten.text.replace("%",""))<100):
-        time.sleep(10)
-    
-    email_Butten = webDriver.find_element(By.ID , "email")
-    email_Butten.send_keys(email)
-    
-    convert_video_Butten = webDriver.find_element(By.ID , "convert_video")
-    convert_video_Butten.click()
 
-    time_left = webDriver.find_element(By.XPATH, "/html/body/div[2]/div/div[1]/div/p")
-    time_lef_num = time_left.text
-    time_lef_num = re.findall(r'\d+',time_lef_num)
-    print("hier hiehr hierh hier"+str(time_lef_num))
-    time.sleep(100)
 
 
 
