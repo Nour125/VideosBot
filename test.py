@@ -105,7 +105,7 @@ def get_srt():
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
     chromeOptions.add_experimental_option("prefs",prefs)
     webDriver = webdriver.Chrome( service = s, options = chromeOptions )
-    
+    webDriver.get_cookies()    
 
     webDriver.get("https://www.subtitlevideo.com/")
     webDriver.implicitly_wait(20)

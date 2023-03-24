@@ -35,7 +35,8 @@ mp4 = ".mp4"
 srt = ".srt"
 zus_audio_name = date.strftime("%d.%m.%Y") + mp3
 zus_video_name = date.strftime("%d.%m.%Y") + mp4
-zus_thumbnail_name ="C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.strftime("%d.%m.%Y") + ".png"
+zus_thumbnail_name = date.strftime("%d.%m.%Y") + ".png"
+thumbnail_Path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.strftime("%d.%m.%Y") + ".png"
 final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4 
 commentsList = []
 submissionList = []
@@ -65,7 +66,7 @@ def hotsub():
         
         x = random.randrange(10)
         if(submissionList[x].over_18 == True):
-            sub = "NSFW" + submissionList[x].title
+            sub = "NSFW." + submissionList[x].title
         else:
             sub = submissionList[x].title
         cursub = submissionList[x] # du brauchst es für die screanshot vom title wie weiss ich noch nicht :(
@@ -111,6 +112,7 @@ def pre_processing(text):
 def tts (text):
     x = gtts.gTTS(text, lang ='en', tld ='us')
     x.save(zus_audio_name)
+    
 
 def get_audio():
     #hier musst du die sub aufrufen damit du den name bekommst
@@ -211,10 +213,12 @@ def delete_unnecessary_stuff():
     delsrt = "del /f " + zus_srt_name
     delv   = "del /f " + zus_video_name #wird nicht gelöscht :(
     dela   = "del /f " + zus_audio_name #wird nicht gelöscht :(
+    delf   = "del /f " + zus_thumbnail_name
 
     subprocess.run(delsrt , shell=True, check=True)
     subprocess.run(delv, shell=True, check=True)
     subprocess.run(dela, shell=True, check=True)
+    subprocess.run(delf, shell=True, check=True)
     subprocess.run("del /f video_with_subtitle.mp4", shell=True, check=True)
 
 def get_thumbnail():
@@ -224,12 +228,39 @@ def get_thumbnail():
     chromeOptions.add_experimental_option("prefs",prefs)
     webDriver = webdriver.Chrome( service = s, options = chromeOptions )
 
-    webDriver.get(submissionList[SubTest].url)
-    webDriver.implicitly_wait(10)
-    #time.sleep(100)
-    bild = webDriver.find_element(By.LINK_TEXT,selected_comment.body_html)
+    webDriver.get(submissionList[SubTest].url + selected_comment.id)
+    webDriver.implicitly_wait(20)
     
-    bild.screenshot(zus_thumbnail_name)
+    cookies_Butten = webDriver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/div[1]/section/div/section[2]/section[1]/form/button")
+    cookies_Butten.click()
+    time.sleep(10)
+
+    if(submissionList[SubTest].over_18 == False):
+        pattern = "[class ^= 'Comment t1_" + selected_comment.id +"']"
+        bild = webDriver.find_element(By.CSS_SELECTOR,  pattern)
+        bild.screenshot(thumbnail_Path)
+
+
+def post_video_on_insta():
+    ich = instagrapi.Client()
+    ich.login('trendingtalks_01', '123poi??')
+    video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + final_video_name
+    
+    if(submissionList[SubTest].over_18 == True):
+        thumbnail_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\nsfw.png"
+        caption1 = "NSFW." + submissionList[SubTest].title + "\n" + "Follow @trendingtalks_01" + "\n" + "#redditpost #redditthreads #redditposts #redditmeme #redditmemes #reddit #redditthreac #redditstories #redditstory #relationshipadvice #askreddit #askredditwoman #askredditman #aita #amitheasshole #justnomil"
+        caption = caption1
+    else:
+        get_thumbnail()
+        caption1 = submissionList[SubTest].title + "\n" + "Follow @trendingtalks_01" + "\n" + "#redditpost #redditthreads #redditposts #redditmeme #redditmemes #reddit #redditthreac #redditstories #redditstory #relationshipadvice #askreddit #askredditwoman #askredditman #aita #amitheasshole #justnomil"
+        thumbnail_path = thumbnail_Path
+        caption = caption1
+
+    media = ich.clip_upload(
+        video_path,
+        caption,
+        thumbnail_path,
+    )
 
     
 
@@ -238,16 +269,17 @@ def get_thumbnail():
 
 y = hotsub()
 #doentext = pre_processing(y)
-print(y)
-print("hier ist die subtest " + submissionList[SubTest].url)
-print("hier ist die subtest " + str(selected_comment.body_html))
-get_thumbnail()
+#print(y)
+#print("hier ist die subtest " + submissionList[SubTest].url)
+#print("hier ist die subtest " + selected_comment.id)
+
 #print(doentext)
 #tts(doentext)
 
 #make_suitable_background_video(get_thirty_minute_video())
 #get_srt()
 #create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
+post_video_on_insta()
 #delete_unnecessary_stuff()
 print("done")
 
