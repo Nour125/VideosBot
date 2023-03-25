@@ -212,14 +212,16 @@ def create_final_video(video, subaudio, subtitles):
 #du willst ja nicht alles löschen bis auf das end produtk
 def delete_unnecessary_stuff():
     delsrt = "del /f " + zus_srt_name
-    delv   = "del /f " + zus_video_name #wird nicht gelöscht :(
+    delv   = "del /f " + zus_video_name 
     dela   = "del /f " + zus_audio_name #wird nicht gelöscht :(
-    delf   = "del /f " + zus_thumbnail_name
+    delfpng   = "del /f " + zus_thumbnail_name
+    delfjpeg   = "del /f " + zus_thumbnail_name.replace(".png",".jpeg")
 
     subprocess.run(delsrt , shell=True, check=True)
     subprocess.run(delv, shell=True, check=True)
     subprocess.run(dela, shell=True, check=True)
-    subprocess.run(delf, shell=True, check=True)
+    subprocess.run(delfpng, shell=True, check=True)
+    subprocess.run(delfjpeg, shell=True, check=True)
     subprocess.run("del /f video_with_subtitle.mp4", shell=True, check=True)
 
 def get_thumbnail():
@@ -249,11 +251,11 @@ def post_video_on_insta():
     
     if(submissionList[SubTest].over_18 == True):
         thumbnail_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\nsfw.png"
-        caption1 = "NSFW." + submissionList[SubTest].title + "\n" + "Follow @trendingtalks_01" + "\n" + "#redditpost #redditthreads #redditposts #redditmeme #redditmemes #reddit #redditthreac #redditstories #redditstory #relationshipadvice #askreddit #askredditwoman #askredditman #aita #amitheasshole #justnomil"
+        caption1 = "NSFW. " + submissionList[SubTest].title + "\n\n" + "Follow @trendingtalks_01" + "\n\n" + "#redditpost #redditthreads #redditposts #redditmeme #redditmemes #reddit #redditthreac #redditstories #redditstory #relationshipadvice #askreddit #askredditwoman #askredditman #aita #amitheasshole #justnomil"
         caption = caption1
     else:
         get_thumbnail()
-        caption1 = submissionList[SubTest].title + "\n" + "Follow @trendingtalks_01" + "\n" + "#redditpost #redditthreads #redditposts #redditmeme #redditmemes #reddit #redditthreac #redditstories #redditstory #relationshipadvice #askreddit #askredditwoman #askredditman #aita #amitheasshole #justnomil"
+        caption1 = submissionList[SubTest].title + "\n\n" + "Follow @trendingtalks_01" + "\n\n" + "#redditpost #redditthreads #redditposts #redditmeme #redditmemes #reddit #redditthreac #redditstories #redditstory #relationshipadvice #askreddit #askredditwoman #askredditman #aita #amitheasshole #justnomil"
         im1 = Image.open(thumbnail_Path)
         im1 = im1.convert("RGB")
         thumbnail_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.strftime("%d.%m.%Y") + ".jpeg"
@@ -273,19 +275,19 @@ def post_video_on_insta():
 
 
 y = hotsub()
-#doentext = pre_processing(y)
+doentext = pre_processing(y)
 print(y)
-#print("hier ist die subtest " + submissionList[SubTest].url)
-#print("hier ist die subtest " + selected_comment.id)
+print("hier ist die subtest " + submissionList[SubTest].url)
+print("hier ist die subtest " + selected_comment.id)
 
-#print(doentext)
-#tts(doentext)
+print(doentext)
+tts(doentext)
 
-#make_suitable_background_video(get_thirty_minute_video())
-#get_srt()
-#create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
+make_suitable_background_video(get_thirty_minute_video())
+get_srt()
+create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
 post_video_on_insta()
-#delete_unnecessary_stuff()
+delete_unnecessary_stuff()
 print("done")
 
 # diese ist dafür da das ich einmal pro Tag poste
