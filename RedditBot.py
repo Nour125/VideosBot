@@ -25,6 +25,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import ffmpeg
 import subprocess
 import instagrapi
+from PIL import Image
 
 video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
 
@@ -36,7 +37,7 @@ srt = ".srt"
 zus_audio_name = date.strftime("%d.%m.%Y") + mp3
 zus_video_name = date.strftime("%d.%m.%Y") + mp4
 zus_thumbnail_name = date.strftime("%d.%m.%Y") + ".png"
-thumbnail_Path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.strftime("%d.%m.%Y") + ".png"
+thumbnail_Path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + zus_thumbnail_name
 final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4 
 commentsList = []
 submissionList = []
@@ -253,7 +254,11 @@ def post_video_on_insta():
     else:
         get_thumbnail()
         caption1 = submissionList[SubTest].title + "\n" + "Follow @trendingtalks_01" + "\n" + "#redditpost #redditthreads #redditposts #redditmeme #redditmemes #reddit #redditthreac #redditstories #redditstory #relationshipadvice #askreddit #askredditwoman #askredditman #aita #amitheasshole #justnomil"
-        thumbnail_path = thumbnail_Path
+        im1 = Image.open(thumbnail_Path)
+        im1 = im1.convert("RGB")
+        thumbnail_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.strftime("%d.%m.%Y") + ".jpeg"
+        im1.save(thumbnail_path)
+        im1.close()
         caption = caption1
 
     media = ich.clip_upload(
@@ -269,7 +274,7 @@ def post_video_on_insta():
 
 y = hotsub()
 #doentext = pre_processing(y)
-#print(y)
+print(y)
 #print("hier ist die subtest " + submissionList[SubTest].url)
 #print("hier ist die subtest " + selected_comment.id)
 

@@ -49,6 +49,7 @@ import subprocess
 import re
 import instagrapi
 from instagrapi import Client
+from PIL import Image
 
 # Define the input and output file paths
 #subprocess.run(['ffmpeg', '-i','15.03.2023.mp3' , '15.03.2023.wav'])
@@ -59,6 +60,8 @@ srt = ".srt"
 zus_audio_name = date.strftime("%d.%m.%Y") + mp3
 zus_video_name = date.strftime("%d.%m.%Y") + mp4
 final_video_name = date.strftime("%d.%m.%Y") + ".final" + mp4 
+zus_thumbnail_name ="C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.strftime("%d.%m.%Y") + ".png"
+
 
 
 
@@ -88,9 +91,11 @@ def post_video_on_insta():
     ich = instagrapi.Client()
     ich.login('trendingtalks_01', '123poi??')
     video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + final_video_name
+    thumbnail_path = zus_thumbnail_name
     media = ich.clip_upload(
         video_path,
         "Test caption for photo with #hashtags and mention users such @adw0rd",
+        thumbnail_path,
     )
 
 
@@ -121,8 +126,10 @@ def get_srt():
 
 
 
+im1 = Image.open(r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot\25.03.2023.png")
+s = im1.convert("RGB")
+s.save(r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot\25.03.2023.jpeg")
 
-get_srt()
 print("done")
 
 
