@@ -149,7 +149,7 @@ def add_ten_sekunden(video):
     return final_clip
 
 def get_srt():
-    email = "bopaxi6270@kaudat.com" 
+    email = "bopaxi6270@kaudat.com" #gajayiy998@necktai.com
     s = Service("chromedriver.exe")
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
@@ -274,15 +274,52 @@ def post_video_on_insta():
 
 
 
+
+# diese ist dafür da das ich einmal alle 5 studnen zu poste
+
+def main():
+    while(True):
+        y = hotsub()
+        doentext = pre_processing(y)
+        tts(doentext)
+        make_suitable_background_video(get_thirty_minute_video())
+        get_srt()
+        create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
+        post_video_on_insta()
+        delete_unnecessary_stuff()
+        print("done")
+        fünf_stunden = 5 * 60 * 60
+        time.sleep(fünf_stunden)
+
+        """
+        day = datetime.datetime.now
+        day = day + datetime.timedelta(days = 1)
+        while(datetime.date.day() == day ):
+            #einfach warten bis der nächte tag kommt dann nochmla was posten
+            x = x
+        """
+
+
+
+
+
+main()
+
+
+
+
+
+
+
+
+"""
 y = hotsub()
 doentext = pre_processing(y)
 print(y)
 print("hier ist die subtest " + submissionList[SubTest].url)
 print("hier ist die subtest " + selected_comment.id)
-
 print(doentext)
 tts(doentext)
-
 make_suitable_background_video(get_thirty_minute_video())
 get_srt()
 create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
@@ -290,18 +327,4 @@ post_video_on_insta()
 delete_unnecessary_stuff()
 print("done")
 
-# diese ist dafür da das ich einmal pro Tag poste
-
-def main():
-    while(True):
-        #mach was du willst
-
-        day = datetime.datetime.now
-        day = day + datetime.timedelta(days = 1)
-        while(datetime.date.day() == day ):
-            #einfach warten bis der nächte tag kommt dann nochmla was posten
-            x = x
-
-
-
-
+"""
