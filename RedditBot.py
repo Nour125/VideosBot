@@ -149,7 +149,7 @@ def add_ten_sekunden(video):
     return final_clip
 
 def get_srt():
-    email = "bopaxi6270@kaudat.com" #gajayiy998@necktai.com
+    email = "bopaxi6270@kaudat.com" #gajayiy998@necktai.com #jemixa3308@kaudat.com
     s = Service("chromedriver.exe")
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
@@ -288,7 +288,7 @@ def main():
         post_video_on_insta()
         delete_unnecessary_stuff()
         print("done")
-        fünf_stunden = 5 * 60 * 60
+        fünf_stunden = 1* 60 * 60
         time.sleep(fünf_stunden)
 
         """
