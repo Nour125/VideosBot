@@ -286,6 +286,7 @@ def main():
         get_srt()
         create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
         post_video_on_insta()
+        time.sleep(500)
         delete_unnecessary_stuff()
         print("done")
         fünf_stunden = 1* 60 * 60
