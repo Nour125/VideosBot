@@ -149,7 +149,7 @@ def add_ten_sekunden(video):
     return final_clip
 
 def get_srt():
-    email = "bopaxi6270@kaudat.com" #gajayiy998@necktai.com #jemixa3308@kaudat.com
+    email = "gajayiy998@necktai.com" # #jemixa3308@kaudat.com
     s = Service("chromedriver.exe")
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
@@ -275,11 +275,11 @@ def post_video_on_insta():
 
 
 
-# diese ist dafür da das ich einmal alle 5 studnen zu poste
-
 def main():
     while(True):
         y = hotsub()
+        print(y)
+        print(submissionList[SubTest].url)
         doentext = pre_processing(y)
         tts(doentext)
         make_suitable_background_video(get_thirty_minute_video())
