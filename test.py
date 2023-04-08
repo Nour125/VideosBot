@@ -125,17 +125,47 @@ def get_srt():
 
 
 
+def make_suitable_background_video():
+    audio = video_editor.AudioFileClip("07.04.2023.mp4")
+    start = random.randrange(1, 1800)
+    #Bestimmt wie viel Sekunden ausm video genommen werden
+    ende  = start + math.ceil(audio.duration) 
+    cur = video_editor.VideoFileClip("minecraft.mp4")
+    cur = cur.subclip(start, ende)
+    cur.write_videofile(zus_video_name)
+    cur.reader.close()
+    cur.close()  
 
-im1 = Image.open(r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot\25.03.2023.png")
-s = im1.convert("RGB")
-s.save(r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot\25.03.2023.jpeg")
-
-print("done")
 
 
 
+def add_subtitles(video, subtitles):
+    l = "subtitles="+subtitles+":force_style='Alignment=10,Fontsize=14,MarginV=10'"
+    x =  "crop=in_h*0.5625:in_h,scale=1080:-2,setsar=1:1"
+    subprocess.run(['ffmpeg', '-i', video, '-filter:v', x,
+                        '-c:a', 'copy', 'tempv.mp4'])
+    subprocess.run(['ffmpeg', '-i', "tempv.mp4", '-vf', l,
+                        '-c:a', 'copy', 'video_with_subtitle.mp4'])
 
 
+from TikTokApi import TikTokApi
+
+def post_video_on_tiktok():
+    username = 'trandingtalks_01'
+    password = '123poi??'
+    tikTokApi = TikTokApi(username, password)
+    video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + "output3.mp4"
+    caption = "Follow @trendingtalks_01"
+    hashtags = ['redditpost' ,'redditthreads' ,'redditposts' ,'redditmeme' ,'redditmemes' ,'reddit' ,'redditthreac' ,'redditstories','redditstory', 'relationshipadvice','askreddit','askredditwoman','askredditman','aita' ,'amitheasshole','justnomil']
+    response = tikTokApi.upload_video(video_path, caption=caption, hashtags=hashtags)
+    video_id = response['upload_id']
+    tikTokApi.post_video(video_id)
+
+
+
+
+
+post_video_on_tiktok()
 
 """
 

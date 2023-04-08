@@ -26,6 +26,7 @@ import ffmpeg
 import subprocess
 import instagrapi
 from PIL import Image
+from TikTokApi import TikTokApi
 
 video_editor.ImageMagickPath = "C:\Program Files\ImageMagick-7.1.0-Q16-HDRI\magick.exe"
 
@@ -44,6 +45,7 @@ submissionList = []
 commentwords = list()
 thirty_minute_videos = ["minecraft.mp4","Rocket_League.mp4"]
 lenOfCom = 0
+tikTokApi = TikTokApi()
 
 
 reddit = praw.Reddit(
@@ -78,8 +80,8 @@ def hotsub():
         cursub.comments.replace_more(limit = 0)
         #submission.comment_sort = "new"  #Macht iwie nichts :(
         commentsList = list(cursub.comments) 
-        i = 0
-        topcom = commentsList[0]
+        i = 1
+        topcom = commentsList[1]
         com = topcom.body
         commentwords = com.split(" ")
         #was wenn nichts gefunden wurde
@@ -128,7 +130,8 @@ def make_suitable_background_video(video):
     start = random.randrange(1, 1800)
     #Bestimmt wie viel Sekunden ausm video genommen werden
     ende  = start + math.ceil(audio.duration) 
-    cur = video_editor.VideoFileClip(video).subclip(start, ende)
+    cur = video_editor.VideoFileClip(video)
+    cur = cur.subclip(start, ende)
     cur.write_videofile(zus_video_name)
     cur.reader.close()
     cur.close()    
@@ -149,7 +152,7 @@ def add_ten_sekunden(video):
     return final_clip
 
 def get_srt():
-    email = "gajayiy998@necktai.com" # #jemixa3308@kaudat.com
+    email = "jemixa3308@kaudat.com" # #
     s = Service("chromedriver.exe")
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
@@ -188,9 +191,13 @@ def get_srt():
 
 # command to add subtitle to video and create a new video with subtitle
 def add_subtitles(video, subtitles):
-    l = "subtitles="+subtitles+":force_style='Alignment=10,Fontsize=24,MarginV=20'"
-    subprocess.run(['ffmpeg', '-i', video, '-vf', l,
+    l = "subtitles="+subtitles+":force_style='Alignment=10,Fontsize=14,MarginV=10'"
+    x =  "crop=in_h*0.5625:in_h,scale=1080:-2,setsar=1:1"
+    subprocess.run(['ffmpeg', '-i', video, '-filter:v', x,
+                        '-c:a', 'copy', 'tempv.mp4'])
+    subprocess.run(['ffmpeg', '-i', "tempv.mp4", '-vf', l,
                         '-c:a', 'copy', 'video_with_subtitle.mp4'])
+    
     
     
   
@@ -214,8 +221,9 @@ def delete_unnecessary_stuff():
     delsrt = "del /f " + zus_srt_name
     delv   = "del /f " + zus_video_name 
     dela   = "del /f " + zus_audio_name #wird nicht gelöscht :(
-    delfpng   = "del /f " + zus_thumbnail_name
-    delfjpeg   = "del /f " + zus_thumbnail_name.replace(".png",".jpeg")
+    delfpng = "del /f " + zus_thumbnail_name
+    delfjpeg = "del /f " + zus_thumbnail_name.replace(".png",".jpeg")
+    delfv = "del /f " + final_video_name
 
     subprocess.run(delsrt , shell=True, check=True)
     subprocess.run(delv, shell=True, check=True)
@@ -223,6 +231,8 @@ def delete_unnecessary_stuff():
     subprocess.run(delfpng, shell=True, check=True)
     subprocess.run(delfjpeg, shell=True, check=True)
     subprocess.run("del /f video_with_subtitle.mp4", shell=True, check=True)
+    subprocess.run("del /f tempv.mp4", shell=True, check=True)
+    subprocess.run(delfv, shell=True, check=True)
 
 def get_thumbnail():
     s = Service("chromedriver.exe")
@@ -240,7 +250,8 @@ def get_thumbnail():
 
     if(submissionList[SubTest].over_18 == False):
         pattern = "[class ^= 'Comment t1_" + selected_comment.id +"']"
-        bild = webDriver.find_element(By.CSS_SELECTOR,  pattern)
+        id = "t3_" + submissionList[SubTest].id
+        bild = webDriver.find_element(By.ID, id)
         bild.screenshot(thumbnail_Path)
 
 
@@ -269,7 +280,17 @@ def post_video_on_insta():
         thumbnail_path,
     )
 
-    
+    #funktioniert nicht :(
+def post_video_on_tiktok():
+    username = 'Trandingtalks_01'
+    password = '123poi??'
+    tikTokApi.login(username, password)
+    video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + final_video_name
+    caption = submissionList[SubTest].title + "\n\n" + "Follow @trendingtalks_01"
+    hashtags = ['redditpost' ,'redditthreads' ,'redditposts' ,'redditmeme' ,'redditmemes' ,'reddit' ,'redditthreac' ,'redditstories','redditstory', 'relationshipadvice','askreddit','askredditwoman','askredditman','aita' ,'amitheasshole','justnomil']
+    response = tikTokApi.upload_video(video_path, caption=caption, hashtags=hashtags)
+    video_id = response['upload_id']
+    tikTokApi.post_video(video_id)
 
 
 
@@ -286,10 +307,10 @@ def main():
         get_srt()
         create_final_video(zus_video_name, zus_audio_name, zus_srt_name)
         post_video_on_insta()
-        time.sleep(500)
+        time.sleep(600)
         delete_unnecessary_stuff()
         print("done")
-        fünf_stunden = 1* 60 * 60
+        fünf_stunden = 5 * 60 * 60
         time.sleep(fünf_stunden)
 
         """
@@ -305,10 +326,6 @@ def main():
 
 
 main()
-
-
-
-
 
 
 
