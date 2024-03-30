@@ -66,8 +66,8 @@ zus_thumbnail_name ="C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + date.st
 
 
 def post_video():
-    email = "rbot629@gmail.com"
-    password = "123poi??"
+    email = "use your own"
+    password = "use your own"
     s = Service("chromedriver.exe")
     chromeOptions = webdriver.ChromeOptions()
     prefs = {"download.default_directory" : r"C:\Users\nourm\OneDrive\Desktop\Nour\Bot"}
@@ -89,7 +89,7 @@ def post_video():
 
 def post_video_on_insta():
     ich = instagrapi.Client()
-    ich.login('trendingtalks_01', '123poi??')
+    ich.login('username, password')
     video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + final_video_name
     thumbnail_path = zus_thumbnail_name
     media = ich.clip_upload(
@@ -151,8 +151,8 @@ def add_subtitles(video, subtitles):
 from TikTokApi import TikTokApi
 
 def post_video_on_tiktok():
-    username = 'trandingtalks_01'
-    password = '123poi??'
+    username = 'use your own'
+    password = 'use your own'
     tikTokApi = TikTokApi(username, password)
     video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + "output3.mp4"
     caption = "Follow @trendingtalks_01"
