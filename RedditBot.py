@@ -257,7 +257,7 @@ def get_thumbnail():
 
 def post_video_on_insta():
     ich = instagrapi.Client()
-    ich.login('trendingtalks_01', '123poi??')
+    ich.login('username', 'password')
     video_path = "C:\\Users\\nourm\\OneDrive\\Desktop\\Nour\\Bot\\" + final_video_name
     
     if(submissionList[SubTest].over_18 == True):
