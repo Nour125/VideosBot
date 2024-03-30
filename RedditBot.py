@@ -49,11 +49,11 @@ tikTokApi = TikTokApi()
 
 
 reddit = praw.Reddit(
-    password="123poi??",
-    username="ReadB629",
-    client_id="V90ZcAcJHvtdIDcPnJZhrQ",
-    client_secret="OH-XMcqE8mg0gwTDyOE4zFWk9ZMIDg",
-    user_agent="ReadBot:1.0",
+    password="use your own",
+    username="use your own",
+    client_id="use your own",
+    client_secret="use your own",
+    user_agent="use your own",
 )
 
 
